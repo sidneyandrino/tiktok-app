@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>TikTok Auth Callback</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 600px; margin: 60px auto; padding: 0 20px; background: #0f0f0f; color: #fff; text-align: center; }
+    h2 { color: #6C63FF; }
+    #code-box { background: #1a1a1a; border: 2px solid #6C63FF; border-radius: 8px; padding: 20px; margin: 20px 0; font-family: monospace; font-size: 14px; word-break: break-all; }
+    button { background: #6C63FF; color: white; border: none; padding: 12px 28px; border-radius: 8px; font-size: 16px; cursor: pointer; }
+    button:hover { background: #5a52e0; }
+    #status { margin-top: 12px; color: #aaa; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <h2>Autorização TikTok</h2>
+  <p id="msg">Capturando código...</p>
+  <div id="code-box" style="display:none"></div>
+  <button id="btn" style="display:none" onclick="copiar()">Copiar código</button>
+  <p id="status"></p>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const code   = params.get("code");
+    const error  = params.get("error");
+
+    if (code) {
+      document.getElementById("msg").textContent = "✅ Autorizado! Copie o código abaixo e cole no terminal:";
+      const box = document.getElementById("code-box");
+      box.textContent = code;
+      box.style.display = "block";
+      document.getElementById("btn").style.display = "inline-block";
+    } else if (error) {
+      document.getElementById("msg").textContent = "❌ Erro: " + error;
+    } else {
+      document.getElementById("msg").textContent = "Nenhum código encontrado na URL.";
+    }
+
+    function copiar() {
+      navigator.clipboard.writeText(code).then(() => {
+        document.getElementById("status").textContent = "Copiado!";
+      });
+    }
+  </script>
+</body>
+</html>
